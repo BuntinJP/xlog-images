@@ -3,8 +3,12 @@
   "module": "src/main.ts",
   "type": "module",
   "scripts": {
-    "upload": "bun run src/main.ts -u",
-    "gen": "bun run src/main.ts -g"
+    "all": "bun run src/main.ts -a",
+    "gen": "bun run src/main.ts -g",
+    "original": "bun run src/main.ts -o",
+    "delete": "bun run src/main.ts -d",
+    "refresh":"bun run src/main.ts -r",
+    "help": "bun run src/main.ts -h"
   },
   "devDependencies": {
     "@types/bun": "latest"
