@@ -276,7 +276,8 @@ const pushContentToDocs = async (content: string, docsFilePath: string, publicId
     }
 
     const bufContent = (await file.text()) + '\n\n';
-    const newContent = bufContent + content + '\n' + '---';
+    const mdContent = genMarkdown(content);
+    const newContent = bufContent + mdContent + '\n' + '---';
 
     const fileContent = newContent.replace('IMAGE_HTML_TAG', content);
     await Bun.write(docsFilePath, fileContent);
@@ -305,7 +306,7 @@ const genOriginUrl = async (publicId: string) => {
     const imageInfo = ((await getImageInfo(publicId)) || {}) as CloudImageInfo;
     const { originalFilename } = imageInfo;
     const htmlString = `<img src="${imageUrl}" alt="Cloudinary image<${originalFilename}-${publicId}>" />`;
-    const buf = genMarkdown(htmlString);
+    const buf = htmlString;
 
     const timestampString = getDateString();
 
