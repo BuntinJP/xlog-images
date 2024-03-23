@@ -68,7 +68,7 @@ const args = parseArgs({
 
 /* ここから 環境設定 */
 const uploadDir = path.join(process.cwd(), 'upload');
-const postDir = path.join(xlogDir, 'content', 'posts');
+const postDir = path.join(xlogDir, 'content');
 const docsDir = path.join(process.cwd(), 'docs');
 const backupDir = path.join(process.cwd(), 'backup');
 
@@ -293,7 +293,7 @@ const formatPublicId = (publicId: string): string => {
 
   const [, year, month, day, filename] = match; //map[""]
 
-  return `${year}-${month}-${day}-${filename}`;
+  return `${filename}-${year}${month}${day}`;
 };
 const genOriginUrl = async (publicId: string) => {
   try {
