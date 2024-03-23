@@ -1,0 +1,86 @@
+{
+  "uploaded": [
+    {
+      "publicId": "2024/02/22/buntin-logo",
+      "url": "https://res.cloudinary.com/xlog/image/upload/v1710263407/2024/02/22/buntin-logo.jpg",
+      "originalFilename": "buntin-logo.jpg",
+      "result": {
+        "asset_id": "f984c6e603de1bad46a56115dd74c6c1",
+        "public_id": "2024/02/22/buntin-logo",
+        "version": 1710263407,
+        "version_id": "60e91e14d9765417881f0e7346a29dd4",
+        "signature": "65a7e130a4c9426364ffe80bc398b2db93bd6d3c",
+        "width": 126,
+        "height": 126,
+        "format": "jpg",
+        "resource_type": "image",
+        "created_at": "2024-03-12T17:10:07Z",
+        "tags": [],
+        "bytes": 6228,
+        "type": "upload",
+        "etag": "d35b10ce1de23cf9809f4dbec05dcd76",
+        "placeholder": false,
+        "url": "http://res.cloudinary.com/xlog/image/upload/v1710263407/2024/02/22/buntin-logo.jpg",
+        "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1710263407/2024/02/22/buntin-logo.jpg",
+        "folder": "2024/02/22",
+        "original_filename": "buntin-logo",
+        "api_key": "732162192172578"
+      }
+    },
+    {
+      "publicId": "2024/03/01/github-gpg-signing-result",
+      "url": "https://res.cloudinary.com/xlog/image/upload/v1710263407/2024/03/01/github-gpg-signing-result.png",
+      "originalFilename": "github-gpg-signing-result.png",
+      "result": {
+        "asset_id": "cff1bcb1e0a975229e67a24b436d9d18",
+        "public_id": "2024/03/01/github-gpg-signing-result",
+        "version": 1710263407,
+        "version_id": "c1aa5342d8ec8efbbc46096f61a6c124",
+        "signature": "3269495be0c8433a659dbdc7c5b2a6ae70c460ff",
+        "width": 1686,
+        "height": 764,
+        "format": "png",
+        "resource_type": "image",
+        "created_at": "2024-03-12T17:10:07Z",
+        "tags": [],
+        "bytes": 98160,
+        "type": "upload",
+        "etag": "065c9c71b20fe0de95084ab8c97e3408",
+        "placeholder": false,
+        "url": "http://res.cloudinary.com/xlog/image/upload/v1710263407/2024/03/01/github-gpg-signing-result.png",
+        "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1710263407/2024/03/01/github-gpg-signing-result.png",
+        "folder": "2024/03/01",
+        "original_filename": "github-gpg-signing-result",
+        "api_key": "732162192172578"
+      }
+    },
+    {
+      "publicId": "2024/03/08/welcome-dehydrated-info",
+      "url": "https://res.cloudinary.com/xlog/image/upload/v1710263407/2024/03/08/welcome-dehydrated-info.png",
+      "originalFilename": "welcome-dehydrated-info.png",
+      "result": {
+        "asset_id": "10f624c8c55f0c3e11f077db156fa5dc",
+        "public_id": "2024/03/08/welcome-dehydrated-info",
+        "version": 1710263407,
+        "version_id": "c1aa5342d8ec8efbbc46096f61a6c124",
+        "signature": "9e280e14a874381b54eefbeb4acf83c600449105",
+        "width": 520,
+        "height": 204,
+        "format": "png",
+        "resource_type": "image",
+        "created_at": "2024-03-12T17:10:07Z",
+        "tags": [],
+        "bytes": 22875,
+        "type": "upload",
+        "etag": "6b65abb0bb027bf25078c5c364ef1337",
+        "placeholder": false,
+        "url": "http://res.cloudinary.com/xlog/image/upload/v1710263407/2024/03/08/welcome-dehydrated-info.png",
+        "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1710263407/2024/03/08/welcome-dehydrated-info.png",
+        "folder": "2024/03/08",
+        "original_filename": "welcome-dehydrated-info",
+        "api_key": "732162192172578"
+      }
+    }
+  ],
+  "destroyed": []
+}

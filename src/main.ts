@@ -70,6 +70,7 @@ const args = parseArgs({
 const uploadDir = path.join(process.cwd(), 'upload');
 const postDir = path.join(xlogDir, 'content');
 const docsDir = path.join(process.cwd(), 'docs');
+const htmlDir = path.join(process.cwd(), 'html');
 const backupDir = path.join(process.cwd(), 'backup');
 
 const publicIdExists = async (publicId: string) => {
@@ -137,7 +138,9 @@ const uploadImage = async (imagePath: string) => {
   }
 
   try {
-    const result = await cloudinary.uploader.upload(imagePath, { public_id: publicId });
+    const result = await cloudinary.uploader.upload(imagePath, {
+      public_id: publicId,
+    });
     console.log('Upload successful:', JSON.stringify(result, null, 2));
     const imageInfo = {
       publicId,
@@ -153,7 +156,9 @@ const uploadImage = async (imagePath: string) => {
   }
 };
 
-const extractDateComponents = (inputString: string): { year: string; month: string; day: string } | undefined => {
+const extractDateComponents = (
+  inputString: string
+): { year: string; month: string; day: string } | undefined => {
   const datePattern = /date\s*=\s*"(\d{4})-(\d{2})-(\d{2})"/;
   const match = inputString.match(datePattern);
 
@@ -173,7 +178,9 @@ const readPosts = async () => {
   const buf = [];
   for (const post of posts) {
     if (post.isFile()) {
-      const contentLines = (await fs.readFile(path.join(postDir, post.name), 'utf-8')).split('\n');
+      const contentLines = (
+        await fs.readFile(path.join(postDir, post.name), 'utf-8')
+      ).split('\n');
       for (const line of contentLines) {
         const dateComponents = extractDateComponents(line);
         if (dateComponents) {
@@ -191,7 +198,12 @@ const genDateDirs = async () => {
   const dateDirs = new Set<string>();
   const gitkeeps = new Set<string>();
   for (const { dateComponents } of posts) {
-    const dateDirPath = path.join(uploadDir, `${dateComponents.year}`, `${dateComponents.month}`, `${dateComponents.day}`);
+    const dateDirPath = path.join(
+      uploadDir,
+      `${dateComponents.year}`,
+      `${dateComponents.month}`,
+      `${dateComponents.day}`
+    );
     const gitkeepPath = path.join(dateDirPath, '.gitkeep');
     dateDirs.add(dateDirPath);
     gitkeeps.add(gitkeepPath);
@@ -220,8 +232,12 @@ const getFilePaths = async (dir: string): Promise<string[]> => {
   return files.flat();
 };
 const trimFilePaths = (filePaths: string[]) => {
-  const withoutGitkeep = filePaths.filter((filePath) => !filePath.endsWith('.gitkeep'));
-  const trimmed = withoutGitkeep.map((filePath) => filePath.replace(uploadDir, ''));
+  const withoutGitkeep = filePaths.filter(
+    (filePath) => !filePath.endsWith('.gitkeep')
+  );
+  const trimmed = withoutGitkeep.map((filePath) =>
+    filePath.replace(uploadDir, '')
+  );
   return {
     withoutGitkeep,
     trimmed,
@@ -239,7 +255,8 @@ const saveJsonObject = async (obj: any) => {
   await fs.writeFile(filename, json);
 };
 
-const genMarkdown = (htmlString: string) => `## [${getDateString()}]\n\n\`\`\`html\n${htmlString}\n\`\`\``;
+const genMarkdown = (htmlString: string) =>
+  `## [${getDateString()}]\n\n\`\`\`html\n${htmlString}\n\`\`\``;
 
 const loadTemplate = async () => {
   const template = await Bun.file('./docs/template.md').text();
@@ -255,7 +272,10 @@ const checkDocMarkdown = async (docsFilePath: string, publicId: string) => {
       if (!imageInfo) {
         throw new Error('Image info not found');
       }
-      const docsContent = (await loadTemplate()).replace('IMAGEINFO_IMAGEINFO', JSON.stringify(imageInfo, null, 2));
+      const docsContent = (await loadTemplate()).replace(
+        'IMAGEINFO_IMAGEINFO',
+        JSON.stringify(imageInfo, null, 2)
+      );
       await Bun.write(docsFilePath, docsContent);
     } else {
       console.log('File exists:', docsFilePath);
@@ -267,7 +287,12 @@ const checkDocMarkdown = async (docsFilePath: string, publicId: string) => {
   }
 };
 
-const pushContentToDocs = async (content: string, docsFilePath: string, publicId: string) => {
+const pushContentToDocs = async (
+  content: string,
+  docsFilePath: string,
+  htmlFilePath: string,
+  publicId: string
+) => {
   try {
     const file = Bun.file(docsFilePath);
     const imageInfo = await getImageInfo(publicId);
@@ -280,13 +305,15 @@ const pushContentToDocs = async (content: string, docsFilePath: string, publicId
     const newContent = bufContent + mdContent + '\n' + '---';
 
     const fileContent = newContent.replace('IMAGE_HTML_TAG', content);
+
     await Bun.write(docsFilePath, fileContent);
+    await Bun.write(htmlFilePath, content);
   } catch (error) {
     console.error('Error pushing content to docs:', error);
   }
 };
 
-// '2024/2/2/???(filename)' 形式の文字列から '2024-2-2-filename' を生成する関数
+// '2024/2/2/???(filename)' 形式の文字列から 'filename-YYYYMMDD' を生成する関数
 const formatPublicId = (publicId: string): string => {
   const match = publicId.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})\/(.+)$/);
   if (!match) {
@@ -310,12 +337,22 @@ const genOriginUrl = async (publicId: string) => {
 
     const timestampString = getDateString();
 
-    const filePath = path.join(docsDir, timestampString, `${formatPublicId(publicId)}-doc.md`);
-    const result = await checkDocMarkdown(filePath, publicId);
+    const docsFilePath = path.join(
+      docsDir,
+      timestampString,
+      `${formatPublicId(publicId)}-doc.md`
+    );
+    const htmlFilePath = path.join(
+      htmlDir,
+      timestampString,
+      `${formatPublicId(publicId)}.html`
+    );
+
+    const result = await checkDocMarkdown(docsFilePath, publicId);
     if (result) {
-      await pushContentToDocs(buf, filePath, publicId);
+      await pushContentToDocs(buf, docsFilePath, htmlFilePath, publicId);
     }
-    console.log(`File saved as ${filePath}`);
+    console.log(`File saved as ${docsFilePath}`);
   } catch (error) {
     console.error('Error saving HTML to file:', error);
   }
@@ -332,7 +369,9 @@ const deleteCloudAsset = async (publicId: string) => {
     const archive = await loadJsonArchive();
     archive.destroyed.push(imageInfo);
     //rm from archive.uploaded
-    archive.uploaded = archive.uploaded.filter((image) => image.publicId !== publicId);
+    archive.uploaded = archive.uploaded.filter(
+      (image) => image.publicId !== publicId
+    );
     const json = JSON.stringify(archive, null, 2);
     await Bun.write('./uploaded.json', json);
     return result;
@@ -371,11 +410,16 @@ const refreshArchive = async () => {
   const { withoutGitkeep } = trimFilePaths(filePaths);
   const uploadDirFilePaths = withoutGitkeep;
   const nowArchive = await loadJsonArchive();
-  const _backupArchive = await Bun.write(path.join(backupDir, `${getDateString()}.json`), JSON.stringify(nowArchive, null, 2));
+  const _backupArchive = await Bun.write(
+    path.join(backupDir, `${getDateString()}.json`),
+    JSON.stringify(nowArchive, null, 2)
+  );
 
   const { uploaded, destroyed } = nowArchive;
   const newDestroyed = destroyed.filter((image) => {
-    return uploaded.some((uploadedImage) => uploadedImage.publicId === image.publicId);
+    return uploaded.some(
+      (uploadedImage) => uploadedImage.publicId === image.publicId
+    );
   });
   const res = await Bun.write(
     './uploaded.json',
@@ -405,7 +449,9 @@ const refreshArchive = async () => {
     const results = uploadDirFilePaths.map(async (filePath) => {
       return await uploadImage(filePath);
     });
-    const uploadResults = (await Promise.all(results)).filter((result) => result !== undefined);
+    const uploadResults = (await Promise.all(results)).filter(
+      (result) => result !== undefined
+    );
     await saveJsonObject(uploadResults);
     return;
   } else if (args.values.gen) {
@@ -430,9 +476,15 @@ const refreshArchive = async () => {
     return;
   } else if (args.values.help) {
     console.log('Help');
-    console.log('[bun run all] option: -a, --all', 'Upload all images in upload directory');
+    console.log(
+      '[bun run all] option: -a, --all',
+      'Upload all images in upload directory'
+    );
     console.log('[bun run gen] option: -g, --gen', 'Generate date directories');
-    console.log('[bun run original] option: -o, --original', 'Generate original image URLs');
+    console.log(
+      '[bun run original] option: -o, --original',
+      'Generate original image URLs'
+    );
     console.log('[bun run delete] option: -d, --delete', 'Delete all images');
     console.log('[bun run test] option: -t, --test', 'Test');
     console.log('[bun run refresh] option: -r, --refresh', 'Refresh archive');
