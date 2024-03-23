@@ -276,9 +276,10 @@ const pushContentToDocs = async (content: string, docsFilePath: string, publicId
     }
 
     const bufContent = (await file.text()) + '\n\n';
-    const newContent = bufContent + content + '\n' + `### [${new Date().toISOString()}]${imageInfo.originalFilename}||${imageInfo.result.etag}-${publicId}\n\n`;
+    const newContent = bufContent + content + '\n' + '---';
 
-    await Bun.write(docsFilePath, newContent);
+    const fileContent = newContent.replace('IMAGE_HTML_TAG', content);
+    await Bun.write(docsFilePath, fileContent);
   } catch (error) {
     console.error('Error pushing content to docs:', error);
   }
