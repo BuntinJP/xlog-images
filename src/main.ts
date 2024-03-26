@@ -17,6 +17,11 @@ type UploadedArchive = {
   uploaded: CloudImageInfo[];
   destroyed: CloudImageInfo[];
 };
+type DateComponents = {
+  year: string;
+  month: string;
+  day: string;
+};
 
 /* CONFIG AREA */
 
@@ -156,64 +161,58 @@ const uploadImage = async (imagePath: string) => {
   }
 };
 
-const extractDateComponents = (
-  inputString: string
-): { year: string; month: string; day: string } | undefined => {
-  const datePattern = /date\s*=\s*"(\d{4})-(\d{2})-(\d{2})"/;
-  const match = inputString.match(datePattern);
-
-  if (match) {
-    const year = match[1];
-    const month = match[2];
-    const day = match[3];
-
-    return { year, month, day };
-  } else {
-    return undefined;
+const extractDateComponents = (inputStrings: string[]): DateComponents | undefined => {
+  const datePattern = /date:\s*(\d{4})-(\d{2})-(\d{2})/;
+  for (const inputString of inputStrings) {
+    const match = inputString.match(datePattern);
+    if (match) {
+      const year = match[1];
+      const month = match[2];
+      const day = match[3];
+      return { year, month, day };
+    }
   }
+  return undefined;
 };
 
-const readPosts = async () => {
-  const posts = await fs.readdir(postDir, { withFileTypes: true });
-  const buf = [];
-  for (const post of posts) {
-    if (post.isFile()) {
-      const contentLines = (
-        await fs.readFile(path.join(postDir, post.name), 'utf-8')
-      ).split('\n');
-      for (const line of contentLines) {
-        const dateComponents = extractDateComponents(line);
-        if (dateComponents) {
-          buf.push({ dateComponents, post });
-          break;
+const genDateDirs = async (directoryPath: string): Promise<'complete' | 'error'> => {
+  try {
+    const files = await fs.readdir(directoryPath, { withFileTypes: true });
+    const dateComponentsList: DateComponents[] = [];
+
+    for (const file of files) {
+      if (file.isFile() && file.name.endsWith('.mdx')) {
+        const filePath = path.join(directoryPath, file.name);
+        const contentLines = (await fs.readFile(filePath, 'utf-8')).split('\n');
+        const dateComponents = extractDateComponents(contentLines);
+        if (dateComponents !== undefined) {
+          dateComponentsList.push(dateComponents);
         }
       }
     }
-  }
-  return buf;
-};
-
-const genDateDirs = async () => {
-  const posts = await readPosts();
-  const dateDirs = new Set<string>();
-  const gitkeeps = new Set<string>();
-  for (const { dateComponents } of posts) {
-    const dateDirPath = path.join(
-      uploadDir,
-      `${dateComponents.year}`,
-      `${dateComponents.month}`,
-      `${dateComponents.day}`
-    );
-    const gitkeepPath = path.join(dateDirPath, '.gitkeep');
-    dateDirs.add(dateDirPath);
-    gitkeeps.add(gitkeepPath);
-  }
-  //make dirs
-  for (const dir of dateDirs) {
-    await fs.mkdir(dir, { recursive: true });
-  }
-  for (const gitkeep of gitkeeps) {
-    await fs.writeFile(gitkeep, '');
+    const dateComponentsAry = dateComponentsList.sort((a: DateComponents, b: DateComponents) => {
+      const aDate = parseInt(`${a.year}${a.month}${a.day}`);
+      const bDate = parseInt(`${b.year}${b.month}${b.day}`);
+      return aDate - bDate;
+    });
+    const dateDirs = new Set<string>();
+    const gitkeeps = new Set<string>();
+    for (const dateComponents of dateComponentsAry) {
+      const dateDirPath = path.join(uploadDir, `${dateComponents.year}`, `${dateComponents.month}`, `${dateComponents.day}`);
+      const gitkeepPath = path.join(dateDirPath, '.gitkeep');
+      dateDirs.add(dateDirPath);
+      gitkeeps.add(gitkeepPath);
+    }
+    //make dirs
+    for (const dir of dateDirs) {
+      await fs.mkdir(dir, { recursive: true });
+    }
+    for (const gitkeep of gitkeeps) {
+      await fs.writeFile(gitkeep, '');
+    }
+    return 'complete';
+  } catch (e) {
+    return 'error';
   }
 };
 const getFilePaths = async (dir: string): Promise<string[]> => {
@@ -232,12 +231,8 @@ const getFilePaths = async (dir: string): Promise<string[]> => {
   return files.flat();
 };
 const trimFilePaths = (filePaths: string[]) => {
-  const withoutGitkeep = filePaths.filter(
-    (filePath) => !filePath.endsWith('.gitkeep')
-  );
-  const trimmed = withoutGitkeep.map((filePath) =>
-    filePath.replace(uploadDir, '')
-  );
+  const withoutGitkeep = filePaths.filter((filePath) => !filePath.endsWith('.gitkeep'));
+  const trimmed = withoutGitkeep.map((filePath) => filePath.replace(uploadDir, ''));
   return {
     withoutGitkeep,
     trimmed,
@@ -255,8 +250,7 @@ const saveJsonObject = async (obj: any) => {
   await fs.writeFile(filename, json);
 };
 
-const genMarkdown = (htmlString: string) =>
-  `## [${getDateString()}]\n\n\`\`\`html\n${htmlString}\n\`\`\``;
+const genMarkdown = (htmlString: string) => `## [${getDateString()}]\n\n\`\`\`html\n${htmlString}\n\`\`\``;
 
 const loadTemplate = async () => {
   const template = await Bun.file('./docs/template.md').text();
@@ -272,13 +266,9 @@ const checkDocMarkdown = async (docsFilePath: string, publicId: string) => {
       if (!imageInfo) {
         throw new Error('Image info not found');
       }
-      const docsContent = (await loadTemplate()).replace(
-        'IMAGEINFO_IMAGEINFO',
-        JSON.stringify(imageInfo, null, 2)
-      );
+      const docsContent = (await loadTemplate()).replace('IMAGEINFO_IMAGEINFO', JSON.stringify(imageInfo, null, 2));
       await Bun.write(docsFilePath, docsContent);
     } else {
-      console.log('File exists:', docsFilePath);
     }
     return true;
   } catch (error) {
@@ -287,12 +277,7 @@ const checkDocMarkdown = async (docsFilePath: string, publicId: string) => {
   }
 };
 
-const pushContentToDocs = async (
-  content: string,
-  docsFilePath: string,
-  htmlFilePath: string,
-  publicId: string
-) => {
+const pushContentToDocs = async (content: string, docsFilePath: string, htmlFilePath: string, publicId: string) => {
   try {
     const file = Bun.file(docsFilePath);
     const imageInfo = await getImageInfo(publicId);
@@ -324,6 +309,7 @@ const formatPublicId = (publicId: string): string => {
 
   return `${filename}-${year}${month}${day}`;
 };
+
 const genOriginUrl = async (publicId: string) => {
   try {
     const imageUrl = cloudinary.url(publicId, {
@@ -337,16 +323,8 @@ const genOriginUrl = async (publicId: string) => {
 
     const timestampString = getDateString();
 
-    const docsFilePath = path.join(
-      docsDir,
-      timestampString,
-      `${formatPublicId(publicId)}-doc.md`
-    );
-    const htmlFilePath = path.join(
-      htmlDir,
-      timestampString,
-      `${formatPublicId(publicId)}.html`
-    );
+    const docsFilePath = path.join(docsDir, timestampString, `${formatPublicId(publicId)}-doc.md`);
+    const htmlFilePath = path.join(htmlDir, timestampString, `${formatPublicId(publicId)}.html`);
 
     const result = await checkDocMarkdown(docsFilePath, publicId);
     if (result) {
@@ -361,7 +339,6 @@ const genOriginUrl = async (publicId: string) => {
 const deleteCloudAsset = async (publicId: string) => {
   try {
     const result = await cloudinary.uploader.destroy(publicId);
-    console.log('Delete result:', JSON.stringify(result, null, 2));
     const imageInfo = await getImageInfo(publicId);
     if (!imageInfo) {
       throw new Error('Image info not found');
@@ -369,9 +346,7 @@ const deleteCloudAsset = async (publicId: string) => {
     const archive = await loadJsonArchive();
     archive.destroyed.push(imageInfo);
     //rm from archive.uploaded
-    archive.uploaded = archive.uploaded.filter(
-      (image) => image.publicId !== publicId
-    );
+    archive.uploaded = archive.uploaded.filter((image) => image.publicId !== publicId);
     const json = JSON.stringify(archive, null, 2);
     await Bun.write('./uploaded.json', json);
     return result;
@@ -410,16 +385,11 @@ const refreshArchive = async () => {
   const { withoutGitkeep } = trimFilePaths(filePaths);
   const uploadDirFilePaths = withoutGitkeep;
   const nowArchive = await loadJsonArchive();
-  const _backupArchive = await Bun.write(
-    path.join(backupDir, `${getDateString()}.json`),
-    JSON.stringify(nowArchive, null, 2)
-  );
+  const _backupArchive = await Bun.write(path.join(backupDir, `${getDateString()}.json`), JSON.stringify(nowArchive, null, 2));
 
   const { uploaded, destroyed } = nowArchive;
   const newDestroyed = destroyed.filter((image) => {
-    return uploaded.some(
-      (uploadedImage) => uploadedImage.publicId === image.publicId
-    );
+    return uploaded.some((uploadedImage) => uploadedImage.publicId === image.publicId);
   });
   const res = await Bun.write(
     './uploaded.json',
@@ -449,13 +419,11 @@ const refreshArchive = async () => {
     const results = uploadDirFilePaths.map(async (filePath) => {
       return await uploadImage(filePath);
     });
-    const uploadResults = (await Promise.all(results)).filter(
-      (result) => result !== undefined
-    );
+    const uploadResults = (await Promise.all(results)).filter((result) => result !== undefined);
     await saveJsonObject(uploadResults);
     return;
   } else if (args.values.gen) {
-    await genDateDirs();
+    console.log(await genDateDirs(postDir));
     return;
   } else if (args.values.original) {
     const archive = await loadJsonArchive();
@@ -476,15 +444,9 @@ const refreshArchive = async () => {
     return;
   } else if (args.values.help) {
     console.log('Help');
-    console.log(
-      '[bun run all] option: -a, --all',
-      'Upload all images in upload directory'
-    );
+    console.log('[bun run all] option: -a, --all', 'Upload all images in upload directory');
     console.log('[bun run gen] option: -g, --gen', 'Generate date directories');
-    console.log(
-      '[bun run original] option: -o, --original',
-      'Generate original image URLs'
-    );
+    console.log('[bun run original] option: -o, --original', 'Generate original image URLs');
     console.log('[bun run delete] option: -d, --delete', 'Delete all images');
     console.log('[bun run test] option: -t, --test', 'Test');
     console.log('[bun run refresh] option: -r, --refresh', 'Refresh archive');
