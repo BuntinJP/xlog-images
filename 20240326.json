@@ -1,0 +1,83 @@
+[
+  {
+    "publicId": "2024/03/26/new-wappalyzer01",
+    "url": "https://res.cloudinary.com/xlog/image/upload/v1711443941/2024/03/26/new-wappalyzer01.png",
+    "originalFilename": "new-wappalyzer01.png",
+    "result": {
+      "asset_id": "97154808b8b9c70b73b1eba1a8b49aee",
+      "public_id": "2024/03/26/new-wappalyzer01",
+      "version": 1711443941,
+      "version_id": "032f016ad043e357ed90fd5390cafdef",
+      "signature": "83d1d3e59d3d8b1857da8f2e80d8fa603e4f0e8b",
+      "width": 996,
+      "height": 1098,
+      "format": "png",
+      "resource_type": "image",
+      "created_at": "2024-03-26T09:05:41Z",
+      "tags": [],
+      "bytes": 120548,
+      "type": "upload",
+      "etag": "14e103a81f950adb05ccce30a5ed6e3a",
+      "placeholder": false,
+      "url": "http://res.cloudinary.com/xlog/image/upload/v1711443941/2024/03/26/new-wappalyzer01.png",
+      "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1711443941/2024/03/26/new-wappalyzer01.png",
+      "folder": "2024/03/26",
+      "original_filename": "new-wappalyzer01",
+      "api_key": "732162192172578"
+    }
+  },
+  {
+    "publicId": "2024/03/26/new-wappalyzer02",
+    "url": "https://res.cloudinary.com/xlog/image/upload/v1711443940/2024/03/26/new-wappalyzer02.png",
+    "originalFilename": "new-wappalyzer02.png",
+    "result": {
+      "asset_id": "892fdcfc00735167df6dfbb3c92167f3",
+      "public_id": "2024/03/26/new-wappalyzer02",
+      "version": 1711443940,
+      "version_id": "bf8249d94284de9ce542aab52cc23d53",
+      "signature": "c8c8231682ee629e4476701321f5eff6eb732199",
+      "width": 998,
+      "height": 1004,
+      "format": "png",
+      "resource_type": "image",
+      "created_at": "2024-03-26T09:05:40Z",
+      "tags": [],
+      "bytes": 127578,
+      "type": "upload",
+      "etag": "9403e58da3d143316e2dc819314779d4",
+      "placeholder": false,
+      "url": "http://res.cloudinary.com/xlog/image/upload/v1711443940/2024/03/26/new-wappalyzer02.png",
+      "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1711443940/2024/03/26/new-wappalyzer02.png",
+      "folder": "2024/03/26",
+      "original_filename": "new-wappalyzer02",
+      "api_key": "732162192172578"
+    }
+  },
+  {
+    "publicId": "2024/03/26/old-wappalyzer01",
+    "url": "https://res.cloudinary.com/xlog/image/upload/v1711443940/2024/03/26/old-wappalyzer01.png",
+    "originalFilename": "old-wappalyzer01.png",
+    "result": {
+      "asset_id": "7c880f0279a847ec1ab65b4dfd3ccd06",
+      "public_id": "2024/03/26/old-wappalyzer01",
+      "version": 1711443940,
+      "version_id": "bf8249d94284de9ce542aab52cc23d53",
+      "signature": "4708bbca06c906751d402f3fe8ee45d7b28fee87",
+      "width": 996,
+      "height": 1092,
+      "format": "png",
+      "resource_type": "image",
+      "created_at": "2024-03-26T09:05:40Z",
+      "tags": [],
+      "bytes": 139176,
+      "type": "upload",
+      "etag": "fa2641e6e86297a8d572396768be0d48",
+      "placeholder": false,
+      "url": "http://res.cloudinary.com/xlog/image/upload/v1711443940/2024/03/26/old-wappalyzer01.png",
+      "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1711443940/2024/03/26/old-wappalyzer01.png",
+      "folder": "2024/03/26",
+      "original_filename": "old-wappalyzer01",
+      "api_key": "732162192172578"
+    }
+  }
+]
