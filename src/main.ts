@@ -347,12 +347,12 @@ const genOriginUrl = async (publicId: string) => {
 
     const docsFilePath = path.join(
       docsDir,
-      timestampString,
+      "target",
       `${formatPublicId(publicId)}-doc.md`
     );
     const htmlFilePath = path.join(
       htmlDir,
-      timestampString,
+      "target",
       `${formatPublicId(publicId)}.html`
     );
 
