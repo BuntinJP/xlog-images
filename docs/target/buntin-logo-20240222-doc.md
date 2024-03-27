@@ -50,3 +50,10 @@
 <img src="https://res.cloudinary.com/xlog/image/upload/v1/2024/02/22/buntin-logo?_a=BAMHUyJt0" alt="Cloudinary image<buntin-logo.jpg-2024/02/22/buntin-logo>" />
 ```
 ---
+
+## [20240327]
+
+```html
+<img src="https://res.cloudinary.com/xlog/image/upload/v1/2024/02/22/buntin-logo?_a=BAMHUyJt0" alt="Cloudinary image<buntin-logo.jpg-2024/02/22/buntin-logo>" />
+```
+---

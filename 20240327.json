@@ -1,0 +1,29 @@
+[
+  {
+    "publicId": "2024/03/26/uptime-downtime-details-ss",
+    "url": "https://res.cloudinary.com/xlog/image/upload/v1711507410/2024/03/26/uptime-downtime-details-ss.png",
+    "originalFilename": "uptime-downtime-details-ss.png",
+    "result": {
+      "asset_id": "fa697b8888e4a7bb0d40a569989aa137",
+      "public_id": "2024/03/26/uptime-downtime-details-ss",
+      "version": 1711507410,
+      "version_id": "6065cbefc6b86c22651c8830f4c635d6",
+      "signature": "e92274ca29d60dd67914078c3fa8a8fe19382223",
+      "width": 3360,
+      "height": 1922,
+      "format": "png",
+      "resource_type": "image",
+      "created_at": "2024-03-27T02:43:30Z",
+      "tags": [],
+      "bytes": 643695,
+      "type": "upload",
+      "etag": "bd9fdcb7de266fdd59923d09dc1d8edb",
+      "placeholder": false,
+      "url": "http://res.cloudinary.com/xlog/image/upload/v1711507410/2024/03/26/uptime-downtime-details-ss.png",
+      "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1711507410/2024/03/26/uptime-downtime-details-ss.png",
+      "folder": "2024/03/26",
+      "original_filename": "uptime-downtime-details-ss",
+      "api_key": "732162192172578"
+    }
+  }
+]
