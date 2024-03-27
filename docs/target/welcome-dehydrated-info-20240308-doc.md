@@ -57,3 +57,10 @@
 <img src="https://res.cloudinary.com/xlog/image/upload/v1/2024/03/08/welcome-dehydrated-info?_a=BAMHUyJt0" alt="Cloudinary image<welcome-dehydrated-info.png-2024/03/08/welcome-dehydrated-info>" />
 ```
 ---
+
+## [20240327]
+
+```html
+<img src="https://res.cloudinary.com/xlog/image/upload/v1/2024/03/08/welcome-dehydrated-info?_a=BAMHUyJt0" alt="Cloudinary image<welcome-dehydrated-info.png-2024/03/08/welcome-dehydrated-info>" />
+```
+---

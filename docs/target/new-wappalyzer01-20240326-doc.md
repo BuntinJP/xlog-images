@@ -57,3 +57,10 @@
 <img src="https://res.cloudinary.com/xlog/image/upload/v1/2024/03/26/new-wappalyzer01?_a=BAMHUyJt0" alt="Cloudinary image<new-wappalyzer01.png-2024/03/26/new-wappalyzer01>" />
 ```
 ---
+
+## [20240327]
+
+```html
+<img src="https://res.cloudinary.com/xlog/image/upload/v1/2024/03/26/new-wappalyzer01?_a=BAMHUyJt0" alt="Cloudinary image<new-wappalyzer01.png-2024/03/26/new-wappalyzer01>" />
+```
+---
