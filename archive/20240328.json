@@ -1,0 +1,29 @@
+[
+  {
+    "publicId": "etc/github-ssh-user-changer-01",
+    "url": "https://res.cloudinary.com/xlog/image/upload/v1711611224/etc/github-ssh-user-changer-01.png",
+    "originalFilename": "github-ssh-user-changer-01.png",
+    "result": {
+      "asset_id": "3496b3f294045ef6af54f64672a8bcac",
+      "public_id": "etc/github-ssh-user-changer-01",
+      "version": 1711611224,
+      "version_id": "af3a1b1466de39d6ef028b2aac2673d1",
+      "signature": "778cdf59540c913baa8a67ac4294761837a4b2b7",
+      "width": 1562,
+      "height": 778,
+      "format": "png",
+      "resource_type": "image",
+      "created_at": "2024-03-28T07:33:44Z",
+      "tags": [],
+      "bytes": 212606,
+      "type": "upload",
+      "etag": "8e339b5398a28a17dc8b1da6602ffcb2",
+      "placeholder": false,
+      "url": "http://res.cloudinary.com/xlog/image/upload/v1711611224/etc/github-ssh-user-changer-01.png",
+      "secure_url": "https://res.cloudinary.com/xlog/image/upload/v1711611224/etc/github-ssh-user-changer-01.png",
+      "folder": "etc",
+      "original_filename": "github-ssh-user-changer-01",
+      "api_key": "732162192172578"
+    }
+  }
+]
